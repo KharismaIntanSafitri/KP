@@ -1,0 +1,143 @@
+<?php
+include "../connect/koneksi.php";
+include "../proses_login/session_login.php";
+$username = $_SESSION["username"];
+$t_user = mysqli_query($koneksi,"SELECT * FROM t_user where username='$username'");
+$data = mysqli_fetch_assoc($t_user);
+$nama = $data["nama_user"];
+$alamat_admin = $data['alamat_user'];
+$aa= strtolower($alamat_admin);
+$bb = ucwords($aa)
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelurahan Gluranploso | Dashboard</title>
+    <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="../assets/img/gresik.png" rel="icon">
+    <link href="../vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
+</head>
+<body>
+                <!-- <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>BERHASIL!!</strong> Pengajuan Berhasil Di Terima
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>GAGAL!!!</strong> Pengajuan Gagal Di Terima
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <strong>BERHASIL!!</strong> Pengajuan Berhasil Di Tolak
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>GAGAL!!!</strong> Pengajuan Gagal Di Tolak
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div> -->
+
+            <?php include "../design/navbar.php";?>
+            <?php include "../design/sidebar.php";?>
+                        <!-- CONTENT -->
+            <div class="container-fluid" style="margin-top: 3%;">
+            <?php include "../admin/filter.php";?>
+
+
+                <div class="container-fluid">
+                    <div class="card shadow mb-4">
+                        <div class="card-header">
+                            <div class="d-sm-flex align-items-center justify-content-between">
+                                <h4 class="m-0 font-weight-bold text-primary">Data Penduduk Desa Gluranploso</h4>
+                                <div>
+                                    <a href="../admin/page_admin.php?admin=<?= $_GET["admin"]?>&alamat_user=<?= $_GET["alamat_user"]?>" class="btn btn-primary">Tampilkan Seluruh Data</a>
+                                    <a href="../input_data/input_warga.php?admin=<?= $_GET["admin"]?>&alamat_user=<?= $_GET["alamat_user"]?>" class="btn btn-primary">Tambah Data Penduduk</a>
+                                    <div class="btn-group" role="group">
+                                        <button  type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Tambah Data Mutasi
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                        <a class="dropdown-item" href="../input_data/input_mutasi_keluar.php?admin=<?= $_GET["admin"]?>&alamat_user=<?= $_GET["alamat_user"]?>" id="mutasi_keluar">Mutasi Keluar</a>
+                                        <a class="dropdown-item" href="../input_data/input_mutasi_masuk.php?admin=<?= $_GET["admin"]?>&alamat_user=<?= $_GET["alamat_user"]?>" id="mutasi_masuk">Mutasi Masuk</a>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- Scrollable modal -->
+                                
+                        </div>
+
+                        <div  style="margin: 2%;">
+                        
+                        <!-- Awal Isi Konten -->
+                        <table class="table table-bordered " id="dataTable" width="100%" cellspacing="0">
+                            <thead class="text-center">
+                                <tr>
+                                    <th>Nomor KK</th>
+                                    <th>NIK</th>
+                                    <th>Nama</th>
+                                    <th>Jenis Kelamin</th>
+                                    <th>Tempat Lahir</th>
+                                    <th>Tanggal Lahir</th>
+                                    <th>Lainnya</th> 
+                                </tr>
+                            </thead>
+                            <tbody >
+                                <?php
+                                if (isset($_POST["cari"])) {
+                                    include '../proses_filter/filter_warga.php';
+                                }elseif (isset($_POST["hitung"])) {
+                                    include '../proses_filter/filter_umur.php';
+                                }elseif (isset($_POST["pindah"])) {
+                                    include '../proses_filter/filter_mutasi.php';
+                                }else{
+                                    include '../db/db_data_pendudukglobal.php';
+                                    
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+          
+                        <!-- akhir Isi Konten -->
+                        </div>
+                    </div>
+                </div>
+
+                
+
+            </div>
+
+
+
+
+
+            
+
+        <!-- End of Sidebar -->
+        
+        <!-- END CONTENT -->
+            <!-- Bootstrap core JavaScript-->
+            <script src="../vendor/jquery/jquery.min.js"></script>
+            <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <script src="../js/js_sidebar.js"></script>
+            <!-- Page level plugins -->
+            <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
+            <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
+
+            <!-- Page level custom scripts -->
+            <script src="../js/demo/datatables-demo.js"></script>
+        </body>
+        </html>
+
